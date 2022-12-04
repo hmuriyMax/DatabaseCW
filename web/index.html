@@ -39,13 +39,30 @@
         <ol>
             <li><a href="/table/repair_request">учет заявок на ремонтные работы</a></li>
             <li><a href="/reports/requests_by_worker">контроль исполнения заявок по исполнителям</a></li>
-            <li><a href="/reports/undone_requests">отчет о невыполненных заявках по исполнителям</a></li>
+            <li>
+                <form method="get" action="/reports/undone_requests">
+                    <button type="submit">отчет о невыполненных заявках по исполнителям:</button>
+                    <label>
+                        <select name="worker_name" required>
+                            {{range .performer.Data}}
+                            {{$name := index . 1}}
+                            <option value="{{$name}}">{{$name}}</option>
+                            {{end}}
+                        </select>
+                    </label>
+                </form>
+            </li>
             <li><a href="/reports/overdue_requests">отчет о заявках, выполненных с превышением срока</a></li>
             <li>
                 <form action="/reports/request_number" method="get">
                     <button type="submit">отчет о количестве заявок заданного типа:</button>
                     <label>
-                        <input type="number" placeholder="id типа заявки" name="type_id" required>
+                        <select name="type_id" required>
+                            {{range .repair_type.Data}}
+                            {{$name := index . 2}}
+                            <option value="{{$name}}">{{$name}}</option>
+                            {{end}}
+                        </select>
                     </label>
                 </form>
             </li>

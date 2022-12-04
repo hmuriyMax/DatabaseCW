@@ -82,7 +82,7 @@
                         <td><label>
                             {{$column := index $tablecols $index}}
                             <input form="upd" placeholder="Новое значение:" type="{{if eq $column.Type "timestamp"}}datetime-local{{else}}text{{end}}"
-                                   value="{{.}}" name="{&quot;Name&quot;: &quot;{{$column.Name}}&quot;, &quot;Type&quot;: &quot;{{$column.Type}}&quot;}" autofocus>
+                                   value="{{.}}" name="{&quot;Name&quot;: &quot;{{$column.Name}}&quot;, &quot;Type&quot;: &quot;{{$column.Type}}&quot;}" autofocus autocomplete="off">
                         </label></td>
                         {{else}}
                         <td>{{.}}</td>
@@ -122,7 +122,7 @@
                                name="{&quot;Name&quot;: &quot;{{.Name}}&quot;, &quot;Type&quot;: &quot;{{.Type}}&quot;}"
                                placeholder="Введите {{.Name}}"
                                {{if eq .Name $idCol}}
-                               value="{{$nextID}}"{{if $readonly}} readonly{{end}}{{end}}>
+                               value="{{$nextID}}"{{if $readonly}} readonly{{end}}{{end}} autocomplete="off">
                     </label></td>
                     {{end}}
                     <td colspan="2">
@@ -145,7 +145,7 @@
         {{end}}
         {{else}}
             <div id="errMain">{{.Error}}</div>
-            <div id="subError" class="mono">{{.SubError}}</div>
+            <div id="subError">{{.SubError}}</div>
         {{end}}
     </main>
 </body>

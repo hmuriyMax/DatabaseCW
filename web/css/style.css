@@ -90,6 +90,7 @@ main{
 }
 
 #errMain, #subError{
+    font-family: 'Consolas', monospace;
     font-size: 0.8em;
     color: #777;
     margin: 2px;
@@ -117,4 +118,22 @@ header ul > li:first-child > a{
 
 main li {
     color: #42275b;
+    margin: 15px 0;
+    font-weight: bold;
+}
+
+select{
+    display: block;
+    margin: 5px auto;
+    padding: 5px;
+    background: #42275b;
+    color: #ffffff;
+    outline: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+input[readonly]{
+    font: inherit;
 }

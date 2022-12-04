@@ -40,12 +40,25 @@ func (s *HTTPService) indexHandler(writer http.ResponseWriter, request *http.Req
 
 	data := make(map[string]interface{})
 	data["tableList"] = tableList
-	err = pageTemplate.Execute(writer, data)
+
+	for _, tName := range tableList {
+		tbl, err := s.db.SelectAll(ctx, tName)
+		if err != nil {
+			http.Error(writer, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		data[tName] = tbl
+	}
 	if err != nil {
 		http.Error(writer, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
+	err = pageTemplate.Execute(writer, data)
+	if err != nil {
+		http.Error(writer, err.Error(), http.StatusInternalServerError)
+		return
+	}
 }
 
 func (s *HTTPService) tableHandler(writer http.ResponseWriter, request *http.Request) {

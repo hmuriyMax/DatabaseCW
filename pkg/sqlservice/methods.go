@@ -5,6 +5,7 @@ import (
 	"fmt"
 	sqr "github.com/Masterminds/squirrel"
 	"github.com/hmuriyMax/DatabaseCW/pkg/sqlservice/entities"
+	"html"
 	"strconv"
 
 	"sort"
@@ -23,10 +24,10 @@ const (
 )
 
 var taskMap = map[ReportType]string{
-	SelectUndoneRequests:   "Отчет о невыполненных заявках по исполнителям",
-	SelectRequestsByWorker: "Контроль исполнения заявок по исполнителям",
-	SelectOverdueRequests:  "Отчет о заявках, выполненных с превышением срока",
-	GetRequestNumber:       "Отчет о количестве заявок заданного типа",
+	SelectUndoneRequests:   "отчет о невыполненных заявках по исполнителю %s",
+	SelectRequestsByWorker: "контроль исполнения заявок по исполнителям",
+	SelectOverdueRequests:  "отчет о заявках, выполненных с превышением срока",
+	GetRequestNumber:       "отчет о количестве заявок типа \"%s\"",
 }
 
 type SortFlag int8
@@ -234,15 +235,19 @@ func (s *SQLService) Report(ctx context.Context, name ReportType, params map[str
 		Name: fmt.Sprint(name),
 	}
 	query := sqr.Select().RunWith(s.db)
+	var textParams []any
 	switch name {
 	case SelectUndoneRequests:
 		query = query.Where("finish_stamp is not null")
 		fallthrough
 	case SelectRequestsByWorker:
-		query = query.Columns("performer.name", "request_id").
+		wName := params["worker_name"][0]
+		textParams = append(textParams, wName)
+		query = query.Columns("request_id").
 			Columns("finish_stamp is null as \"done\"").
 			From("repair_request").
 			LeftJoin("performer using(worker_id)").
+			Where(fmt.Sprintf("name = '%s'", html.EscapeString(wName))).
 			OrderBy("performer.name", "request_id")
 	case SelectOverdueRequests:
 		query = query.Columns("request_id",
@@ -251,21 +256,23 @@ func (s *SQLService) Report(ctx context.Context, name ReportType, params map[str
 			From("repair_request").InnerJoin("repair_type using (repair_type_id)").
 			Where("finish_stamp - start_stamp > duration")
 	case GetRequestNumber:
-		typeId, err := strconv.Atoi(params["type_id"][0])
-		if err != nil {
-			return tbl, fmt.Errorf("report get request number: %v", err)
-		}
-		query = query.Columns("repair_type_id", "count(request_id) as \"number\"").
+		typeId := params["type_id"][0]
+		textParams = append(textParams, typeId)
+		query = query.Columns("count(request_id) as \"number\"").
 			From("repair_request").
-			Where(fmt.Sprintf("repair_type_id = %s", typeId)).
-			GroupBy("repair_type_id")
+			InnerJoin("repair_type using (repair_type_id)").
+			Where(fmt.Sprintf("name = '%v'", html.EscapeString(typeId))).
+			GroupBy("name")
 	default:
 		return &Table{
 			Name: fmt.Sprintf("report_id: %s", name),
 		}, fmt.Errorf("такого отчета не существует")
 	}
 	tbl, err := s.selectByQuery(ctx, &query, SortNone)
-	tbl.Name = taskMap[name]
+	tbl.Name = fmt.Sprintf(taskMap[name], textParams...)
+	if len(tbl.Data) == 0 {
+		return tbl, fmt.Errorf("нет данных по такому запросу")
+	}
 	if err != nil {
 		return tbl, fmt.Errorf("report: %v", err)
 	}
