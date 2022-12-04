@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Main</title>
+    <link rel="stylesheet" href="/res/css/style.css">
+    <style>
+        {{if not .showID}}
+        tr > td:first-child{
+            display: none;
+        }
+        {{end}}
+        {{if .Controls}}
+
+        tr > td:last-child, tr:not(:last-child) > td:nth-last-child(2){
+            padding: 0;
+            min-width: 3vh;
+            min-height: 3vh;
+            font-weight: bold;
+        }
+
+        tr:not(:first-child):not(:last-child) > td:last-child{
+            background-color: #e39393;
+        }
+
+        tr:not(:first-child):not(:last-child) > td:nth-last-child(2){
+            color: #fff;
+            background-color: #42275b;
+        }
+
+        tr:last-child{
+            background-color: rgba(147, 227, 147, 0.22);
+        }
+
+        tr:last-child > td:last-child {
+            background-color: #93e393;
+        }
+        {{end}}
+    </style>
+</head>
+<body>
+    <header>
+            <ul class="mono">
+                <li><a href="/">Home</a></li>
+                {{range .tableList}}
+                <li>
+                    <a href="/table/{{.}}">{{.}}</a>
+                </li>
+                {{end}}
+            </ul>
+    </header>
+    <main>
+        {{if .Table}}
+        <div>Таблица: <span class="mono">{{.Table.Name}}</span></div>
+        {{$tablename := .Table.Name}}
+        {{$tablecols := .Table.Columns.Values}}
+        {{$nextID := .Table.NextID}}
+        {{$idCol := .Table.Columns.IDColumn}}
+        {{$editingID := .editingID}}
+        {{$controls := .Controls}}
+        {{$readonly := .IDro}}
+            <table class="mono">
+                <tr>
+                    {{range .Table.Columns.Values}}
+                    <td>{{.Name}}</td>
+                    {{end}}
+                    {{if $controls}}
+                    <td></td>
+                    <td></td>
+                    {{end}}
+                </tr>
+                {{range .Table.Data}}
+                <tr>
+                    {{$thisID := "-1"}}
+                    {{range $index, $row :=  .}}
+                        {{if eq $index 0}}
+                        {{$thisID = .}}
+                        {{end}}
+                        {{if and (eq $index 0) $readonly}}
+                        <td>{{.}}</td>
+                        {{else if eq $thisID $editingID}}
+                        <td><label>
+                            {{$column := index $tablecols $index}}
+                            <input form="upd" placeholder="Новое значение:" type="{{if eq $column.Type "timestamp"}}datetime-local{{else}}text{{end}}"
+                                   value="{{.}}" name="{&quot;Name&quot;: &quot;{{$column.Name}}&quot;, &quot;Type&quot;: &quot;{{$column.Type}}&quot;}" autofocus>
+                        </label></td>
+                        {{else}}
+                        <td>{{.}}</td>
+                        {{end}}
+                    {{end}}
+                    {{if $controls}}
+                    <td>
+                        {{if eq $editingID $thisID}}
+                        <form action="/update/{{$tablename}}" method="get" id="upd">
+<!--                            <input type="hidden" name="cols" value="{{$tablecols}}">-->
+                            <input type="hidden" name="id" value="{{$thisID}}">
+                            <input type="hidden" name="idCol" value="{{$idCol}}">
+                            <input type="submit" value="s" alt="Сохранить">
+                        </form>
+                        {{else}}
+                        <form action="/table/{{$tablename}}" method="get">
+                            <input type="hidden" name="cols" value="{{$tablecols}}">
+                            <input type="hidden" name="row" value="{{.}}">
+                            <input type="submit" value="e" alt="Изменить">
+                        </form>
+                        {{end}}
+                    </td>
+                    <td>
+                        <form action="/delete/{{$tablename}}" method="get">
+                            <input type="hidden" name="row" value="{{.}}">
+                            <input type="hidden" name="cols" value="{{$tablecols}}">
+                            <input type="submit" value="×" style="color: white;" alt="Удалить">
+                        </form>
+                    <tr>
+                    {{end}}
+                {{end}}
+                {{if $controls}}
+                <tr>
+                    {{range .Table.Columns.Values}}
+                    <td><label>
+                        <input type="{{if eq .Type "timestamp"}}datetime-local{{else}}text{{end}}" form="ins"
+                               name="{&quot;Name&quot;: &quot;{{.Name}}&quot;, &quot;Type&quot;: &quot;{{.Type}}&quot;}"
+                               placeholder="Введите {{.Name}}"
+                               {{if eq .Name $idCol}}
+                               value="{{$nextID}}"{{if $readonly}} readonly{{end}}{{end}}>
+                    </label></td>
+                    {{end}}
+                    <td colspan="2">
+                        <form action="/insert/{{$tablename}}" method="get" id="ins">
+                            <input type="submit" value="+" alt="Добавить">
+                        </form>
+                    </td>
+                </tr>
+                {{end}}
+            </table>
+        {{if .inError}}
+            <div id="inlineErr">{{.inError}}</div>
+        {{end}}
+        {{if $controls}}
+        {{if .showID}}
+        <a class="mono" href="/table/{{$tablename}}?showid=-1">Скрыть ID</a>
+        {{else}}
+        <a class="mono" href="/table/{{$tablename}}?showid=1">Показать ID</a>
+        {{end}}
+        {{end}}
+        {{else}}
+            <div id="errMain">{{.Error}}</div>
+            <div id="subError" class="mono">{{.SubError}}</div>
+        {{end}}
+    </main>
+</body>
+</html>

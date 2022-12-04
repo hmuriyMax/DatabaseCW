@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Главная</title>
+    <link rel="stylesheet" href="/res/css/style.css">
+    <style>
+        button{
+            background: none;
+            appearance: none;
+            border: none;
+            font: inherit;
+            color: inherit;
+            padding: 0;
+            cursor: pointer;
+        }
+        input{
+            height: 1em;
+            border: none;
+            outline-width: 0;
+            padding: 0;
+            font-size: 0.9em;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <ul class="mono">
+            <li><a href="/">Home</a></li>
+            {{range .tableList}}
+            <li>
+                <a href="/table/{{.}}">{{.}}</a>
+            </li>
+            {{end}}
+        </ul>
+    </header>
+    <main>
+        <ol>
+            <li><a href="/table/repair_request">учет заявок на ремонтные работы</a></li>
+            <li><a href="/reports/requests_by_worker">контроль исполнения заявок по исполнителям</a></li>
+            <li><a href="/reports/undone_requests">отчет о невыполненных заявках по исполнителям</a></li>
+            <li><a href="/reports/overdue_requests">отчет о заявках, выполненных с превышением срока</a></li>
+            <li>
+                <form action="/reports/request_number" method="get">
+                    <button type="submit">отчет о количестве заявок заданного типа:</button>
+                    <label>
+                        <input type="number" placeholder="id типа заявки" name="type_id" required>
+                    </label>
+                </form>
+            </li>
+            <li><a href="/table/repair_type">изменение состава типов заявок</a></li>
+            <li><a href="/table/manager">изменение данных о руководителях филиалов</a></li>
+        </ol>
+    </main>
+</body>
+</html>
