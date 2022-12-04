@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 	sqr "github.com/Masterminds/squirrel"
-	"github.com/hmuriyMax/DatabaseCW/pkg/sqlservice/entities"
+	"github.com/hmuriyMax/DatabaseCW/internal/sqlservice/entities"
 	"html"
 	"strconv"
 

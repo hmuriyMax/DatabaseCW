@@ -2,8 +2,8 @@ package main
 
 import (
 	"context"
-	"github.com/hmuriyMax/DatabaseCW/pkg/httpservice"
-	"github.com/hmuriyMax/DatabaseCW/pkg/sqlservice"
+	"github.com/hmuriyMax/DatabaseCW/internal/httpservice"
+	"github.com/hmuriyMax/DatabaseCW/internal/sqlservice"
 	"log"
 	"time"
 )

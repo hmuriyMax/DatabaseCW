@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/gorilla/mux"
-	"github.com/hmuriyMax/DatabaseCW/pkg/sqlservice"
+	"github.com/hmuriyMax/DatabaseCW/internal/sqlservice"
 	"log"
 	"net/http"
 	"time"

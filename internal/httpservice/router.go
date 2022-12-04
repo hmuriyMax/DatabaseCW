@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/gorilla/mux"
-	"github.com/hmuriyMax/DatabaseCW/pkg/sqlservice"
+	"github.com/hmuriyMax/DatabaseCW/internal/sqlservice"
 	"html/template"
 	"net/http"
 	"strings"
