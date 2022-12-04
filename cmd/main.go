@@ -1,9 +1,9 @@
 package main
 
 import (
-	"CW/pkg/httpservice"
-	"CW/pkg/sqlservice"
 	"context"
+	"github.com/hmuriyMax/DatabaseCW/pkg/httpservice"
+	"github.com/hmuriyMax/DatabaseCW/pkg/sqlservice"
 	"log"
 	"time"
 )
@@ -13,7 +13,7 @@ func main() {
 	logger.SetFlags(log.Ldate | log.Lmicroseconds)
 
 	sqlSvc := sqlservice.NewSQLService("postgres", "postgrespw",
-		"127.0.0.1", "55001", "course_work", logger)
+		"127.0.0.1", "55000", "course_work", logger)
 	sqlContext, cancelSql := context.WithTimeout(context.Background(), time.Second)
 	defer cancelSql()
 	err := sqlSvc.Start(sqlContext)

@@ -1,10 +1,10 @@
 package sqlservice
 
 import (
-	"CW/pkg/sqlservice/entities"
 	"context"
 	"fmt"
 	sqr "github.com/Masterminds/squirrel"
+	"github.com/hmuriyMax/DatabaseCW/pkg/sqlservice/entities"
 	"strconv"
 
 	"sort"

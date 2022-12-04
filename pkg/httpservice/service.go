@@ -1,10 +1,10 @@
 package httpservice
 
 import (
-	"CW/pkg/sqlservice"
 	"context"
 	"fmt"
 	"github.com/gorilla/mux"
+	"github.com/hmuriyMax/DatabaseCW/pkg/sqlservice"
 	"log"
 	"net/http"
 	"time"
