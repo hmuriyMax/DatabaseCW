@@ -194,11 +194,8 @@ func (s *HTTPService) updateHandler(writer http.ResponseWriter, request *http.Re
 	data.Name = tableName
 	data.Data = make([][]string, 1)
 	id := request.URL.Query().Get("id")
-	data.Columns.Values = []sqlservice.Column{{
-		Name: request.URL.Query().Get("idCol"),
-		Type: "integer",
-	}}
-	data.Columns.IDColumn = data.Columns.Values[0].Name
+	data.Columns.Values = []sqlservice.Column{}
+	data.Columns.IDColumn = request.URL.Query().Get("idCol")
 	for key, val := range request.URL.Query() {
 		if key == "idCol" || key == "id" {
 			continue
