@@ -158,7 +158,11 @@ func (s *SQLService) Update(ctx context.Context, data Table, id string) interfac
 			} else {
 				formatStr = "%s='%s', "
 			}
-			setStr += fmt.Sprintf(formatStr, data.Columns.Values[i].Name, el)
+			if el == "" {
+				setStr += fmt.Sprintf(formatStr, data.Columns.Values[i].Name)
+			} else {
+				setStr += fmt.Sprintf(formatStr, data.Columns.Values[i].Name, el)
+			}
 		}
 	}
 	query := fmt.Sprintf("update %s set %s where %s = %s", data.Name, setStr[:len(setStr)-2],
