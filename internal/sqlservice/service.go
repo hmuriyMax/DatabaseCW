@@ -34,6 +34,7 @@ func (s *SQLService) Start(ctx context.Context) error {
 	if err != nil {
 		return fmt.Errorf("start connection: %v", err)
 	}
+	s.lg.Printf("Inited db connection on %v:%v/%v\n", s.host, s.port, s.dbName)
 	return nil
 }
 

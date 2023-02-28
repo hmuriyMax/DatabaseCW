@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600&display=swap');
+
 body{
     font-family: Roboto, sans-serif;
     background-color: #EEE;
@@ -136,4 +138,76 @@ select{
 
 input[readonly]{
     font: inherit;
+}
+
+#addBlocks{
+    position: fixed;
+    top: 3em;
+    right: 20px;
+    display: flex;
+    align-items: start;
+    max-width: calc(50% - 300px - 40px)
+}
+
+#addBlocks > *{
+    font-family: 'Source Sans Pro', sans-serif;
+    border-radius: 10px;
+    background-color: white;
+    color: #000;
+    padding: 10px;
+    min-width: 150px;
+    margin: 0 5px 10px 5px;
+    height: max-content;
+}
+
+#clockBlock{
+    background-color: #222;
+    color: #93e393;
+}
+
+#clockBlock div{
+    width: max-content;
+    margin: 0 auto;
+}
+
+#clockBlock .date{
+    font-size: 1em;
+}
+
+#clockBlock .time{
+    line-height: 0.8;
+    font-size: 2em;
+    font-weight: bold;
+}
+
+#calendarBlock{
+    background-color: #333;
+}
+
+#calendarBlock table {
+    border: none;
+    border-right: 1px solid #333;
+    border-radius: 0;
+    margin: 0;
+    background-color: white;
+}
+
+#calendarBlock td {
+    cursor: default;
+    font-family: 'Consolas', monospace;
+    height: 1em;
+    width: 1em;
+    text-align: center;
+    padding: 1px 5px;
+    border-color: #333;
+}
+
+#calendarBlock td:hover {
+    background-color: #93e393;
+}
+
+#todayElement, #todayElement:hover {
+    background-color: #42275b !important;
+    color: #fff !important;
+    font-weight: bold;
 }

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Главная</title>
-    <link rel="stylesheet" href="/res/css/style.css">
+    <link rel="stylesheet" href="res/css/style.css">
     <style>
         button{
             background: none;
@@ -23,6 +23,9 @@
             text-align: center;
         }
     </style>
+    <script type="text/javascript" src="res/js/calendar.js"></script>
+    <script type="text/javascript" src="res/js/const.js"></script>
+    <script type="text/javascript" src="res/js/main.js" defer></script>
 </head>
 <body>
     <header>
@@ -70,5 +73,16 @@
             <li><a href="/table/manager">изменение данных о руководителях филиалов</a></li>
         </ol>
     </main>
+    <div id="addBlocks">
+        <div id="clockBlock">
+            <div id="clock-text">В Москве сегодня:</div>
+            <div class="time">01:02:03</div>
+            <div class="date">01.02.2006</div>
+        </div>
+        <div id="calendarBlock">
+            <table id="jsCalendar">
+            </table>
+        </div>
+    </div>
 </body>
 </html>

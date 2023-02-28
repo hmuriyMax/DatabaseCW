@@ -15,7 +15,7 @@ import (
 const HTMLPath = "./web/"
 
 func (s *HTTPService) addHandlers() {
-	fileServer := http.FileServer(http.Dir("./web"))
+	fileServer := http.FileServer(http.Dir("./web/res"))
 	s.mux.PathPrefix("/res/").Handler(http.StripPrefix("/res/", fileServer))
 	s.mux.HandleFunc("/", s.indexHandler)
 	s.mux.HandleFunc("/table/{tableName}", s.tableHandler)
