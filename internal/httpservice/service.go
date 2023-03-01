@@ -5,25 +5,27 @@ import (
 	"fmt"
 	"github.com/gorilla/mux"
 	"github.com/hmuriyMax/DatabaseCW/internal/sqlservice"
+	"github.com/hmuriyMax/DatabaseCW/internal/testservice"
 	"log"
 	"net/http"
 	"time"
 )
 
 type HTTPService struct {
-	port       int
-	host       string
-	mux        *mux.Router
-	server     *http.Server
-	db         *sqlservice.SQLService
-	errChan    chan error
-	ctx        context.Context
-	cancel     context.CancelFunc
-	logger     *log.Logger
-	IDEditable bool
+	port         int
+	host         string
+	mux          *mux.Router
+	server       *http.Server
+	db           *sqlservice.SQLService
+	errChan      chan error
+	ctx          context.Context
+	cancel       context.CancelFunc
+	logger       *log.Logger
+	IDEditable   bool
+	testSessions *testservice.TestService
 }
 
-func NewHTTPService(port int, host string, lg *log.Logger, IDEditable bool) (srv HTTPService) {
+func NewHTTPService(port int, host string, lg *log.Logger, IDEditable bool, testService *testservice.TestService) (srv HTTPService) {
 	srv.port = port
 	srv.host = host
 	srv.errChan = make(chan error)
@@ -32,6 +34,7 @@ func NewHTTPService(port int, host string, lg *log.Logger, IDEditable bool) (srv
 	srv.logger.SetFlags(log.Ldate | log.Lmicroseconds)
 	srv.mux = mux.NewRouter()
 	srv.IDEditable = IDEditable
+	srv.testSessions = testService
 
 	srv.server = &http.Server{
 		Addr:        fmt.Sprintf("%s:%d", srv.host, srv.port),
@@ -51,6 +54,7 @@ func (s *HTTPService) serve() {
 		s.errChan <- fmt.Errorf("server or router is not initialized")
 	}
 	s.addHandlers()
+	s.addTestHandlers()
 
 	go func() {
 		err := s.server.ListenAndServe()

@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/hmuriyMax/DatabaseCW/internal/httpservice"
 	"github.com/hmuriyMax/DatabaseCW/internal/sqlservice"
+	"github.com/hmuriyMax/DatabaseCW/internal/testservice"
 	"log"
 	"time"
 )
@@ -21,7 +22,9 @@ func main() {
 		log.Fatal(err)
 	}
 
-	httpSvc := httpservice.NewHTTPService(80, "127.0.0.1", logger, false)
+	ts := testservice.NewTestService()
+
+	httpSvc := httpservice.NewHTTPService(80, "127.0.0.1", logger, false, ts)
 	httpSvc.ConnectToDataBase(sqlSvc)
 	httpSvc.Start()
 

@@ -172,12 +172,12 @@ input[readonly]{
     margin: 0 auto;
 }
 
-#clockBlock .date{
+.smallBlockText{
     font-size: 1em;
 }
 
-#clockBlock .time{
-    line-height: 0.8;
+.largeBlockText{
+    line-height: 1em;
     font-size: 2em;
     font-weight: bold;
 }
@@ -212,4 +212,18 @@ input[readonly]{
     background-color: #42275b !important;
     color: #fff !important;
     font-weight: bold;
+}
+
+#clickOnTestBlock{
+    background-color: #fdda48;
+    color: black;
+    cursor: pointer;
+    transition-duration: 0.2s;
+    text-align: center;
+    font-weight: bold;
+}
+
+#clickOnTestBlock:hover{
+    background-color: #42275b;
+    color: white;
 }
