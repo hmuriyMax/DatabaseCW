@@ -3,7 +3,10 @@ package testservice
 import (
 	"fmt"
 	"log"
+	"os"
 )
+
+const dbProblems = "test.json"
 
 type TestService struct {
 	sessionMap map[int64]*Session
@@ -19,12 +22,29 @@ type Session struct {
 	score      int
 }
 
-func NewTestService() *TestService {
+type FinalScore struct {
+	Correct int `json:"correct"`
+	All     int `json:"all"`
+}
+
+func NewTestService(logger *log.Logger) (*TestService, error) {
 	s := &TestService{
 		sessionMap: make(map[int64]*Session),
 		lastID:     0,
+		lg:         logger,
 	}
-	return s
+	s.problems = Problems{lg: logger}
+
+	bytes, err := os.ReadFile(dbProblems)
+	if err != nil {
+		return nil, fmt.Errorf("error opening test problems: %w", err)
+	}
+
+	err = s.problems.ParseProblems(bytes)
+	if err != nil {
+		return nil, fmt.Errorf("error parsing test problems: %w", err)
+	}
+	return s, nil
 }
 
 func (s *TestService) GetSession(id int64) (*Session, bool) {
@@ -45,16 +65,20 @@ func (s *TestService) InitSession() *Session {
 }
 
 // CloseSession returns correct answers and total answered questions
-func (s *TestService) CloseSession(id int64) (int, int) {
+func (s *TestService) CloseSession(id int64) (FinalScore, error) {
+	fScore := FinalScore{Correct: -1, All: -1}
 	session, found := s.sessionMap[id]
 	if !found {
-		s.lg.Printf("can't find session %d for delete\n", id)
-		return -1, -1
+		return fScore, fmt.Errorf("can't find session %d for delete\n", id)
 	}
-	score := session.score
-	all := len(session.answered)
+
+	if len(session.unanswered) > 0 {
+		return fScore, fmt.Errorf("not all problems are answered")
+	}
+	fScore.Correct = session.score
+	fScore.All = len(session.answered)
 	delete(s.sessionMap, id)
-	return score, all
+	return fScore, nil
 }
 
 func (s *Session) GetNextUnanswered() (int64, bool) {
@@ -67,7 +91,15 @@ func (s *Session) GetNextUnanswered() (int64, bool) {
 }
 
 func (s *TestService) GetProblem(problemID int64) (*Problem, bool) {
-	return s.problems.GetProblem(problemID)
+	p, f := s.problems.GetProblem(problemID)
+	if !f {
+		return nil, false
+	}
+	return &Problem{
+		ID:        p.ID,
+		Question:  p.Question,
+		ImageLink: p.ImageLink,
+	}, true
 }
 
 func (s *TestService) Assert(sessionID int64, problemID int64, answer string) (bool, error) {

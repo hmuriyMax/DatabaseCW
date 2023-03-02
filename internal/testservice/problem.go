@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"golang.org/x/exp/maps"
 	"log"
+	"strings"
 )
 
 type ProblemStatus int
@@ -26,22 +27,24 @@ type Problem struct {
 	ID        int64  `json:"id"`
 	Question  string `json:"question"`
 	ImageLink string `json:"image"`
-	answer    string
+	Answer    string `json:"answer"`
 }
 
 func (s *Problems) ParseProblems(data []byte) error {
-	var taskList []Problem
+	var taskList []*Problem
 	err := json.Unmarshal(data, &taskList)
 	if err != nil {
 		return fmt.Errorf("failed to parse problemCatalog: %w", err)
 	}
+
+	s.problemCatalog = make(map[int64]*Problem, len(taskList))
 
 	for _, task := range taskList {
 		if task.ID < 1 {
 			s.lg.Printf("skipping question with negative ID: %d\n", task.ID)
 			continue
 		}
-		s.problemCatalog[task.ID] = &task
+		s.problemCatalog[task.ID] = task
 	}
 
 	return nil
@@ -52,7 +55,9 @@ func (s *Problems) Assert(questionID int64, userAnswer string) (bool, error) {
 	if !found {
 		return false, fmt.Errorf("question %d not found", questionID)
 	}
-	return questionById.answer == userAnswer, nil
+	corr := strings.ToLower(questionById.Answer)
+	user := strings.ToLower(userAnswer)
+	return corr == user, nil
 }
 
 func (s *Problems) GetProblem(problemID int64) (p *Problem, found bool) {

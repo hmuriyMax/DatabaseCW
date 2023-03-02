@@ -1,0 +1,36 @@
+POST http://localhost:80/test/start
+Content-Type: application/json
+
+{}
+
+###
+POST http://localhost:80/test/next
+Content-Type: application/x-www-form-urlencoded
+
+sessionID=1
+
+###
+POST http://localhost:80/test/assert
+Content-Type: application/x-www-form-urlencoded
+
+sessionID=1&problemID=1&answer=Губка Боб квадратные штаны
+
+###
+POST http://localhost:80/test/next
+Content-Type: application/x-www-form-urlencoded
+
+sessionID=1
+
+###
+POST http://localhost:80/test/assert
+Content-Type: application/x-www-form-urlencoded
+
+sessionID=1&problemID=2&answer=Да
+
+###
+POST http://localhost:80/test/stop
+Content-Type: application/x-www-form-urlencoded
+
+sessionID=1
+
+###

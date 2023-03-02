@@ -14,7 +14,7 @@ func main() {
 	logger.SetFlags(log.Ldate | log.Lmicroseconds)
 
 	sqlSvc := sqlservice.NewSQLService("postgres", "postgrespw",
-		"192.168.1.13", "5432", "course_work", logger)
+		"127.0.0.1", "5432", "course_work", logger)
 	sqlContext, cancelSql := context.WithTimeout(context.Background(), time.Second)
 	defer cancelSql()
 	err := sqlSvc.Start(sqlContext)
@@ -22,7 +22,10 @@ func main() {
 		log.Fatal(err)
 	}
 
-	ts := testservice.NewTestService()
+	ts, err := testservice.NewTestService(logger)
+	if err != nil {
+		logger.Fatal(err)
+	}
 
 	httpSvc := httpservice.NewHTTPService(80, "127.0.0.1", logger, false, ts)
 	httpSvc.ConnectToDataBase(sqlSvc)

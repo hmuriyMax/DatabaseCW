@@ -1,14 +1,14 @@
 [
   {
-    "id": "1",
-    "question": "",
+    "id": 1,
+    "question": "Кто проживает на дне океана?",
     "image": "",
-    "answer": ""
+    "answer": "Губка Боб квадратные штаны"
   },
   {
-    "id": "2",
-    "question": "",
-    "image": "",
-    "answer": ""
+    "id": 2,
+    "question": "Вы умный?",
+    "image": "https://st3.depositphotos.com/1004996/33045/v/600/depositphotos_330455390-stock-illustration-comic-finger-points-at-viewer.jpg",
+    "answer": "да"
   }
 ]

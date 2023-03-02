@@ -10,6 +10,7 @@ func (s *HTTPService) addTestHandlers() {
 	s.mux.HandleFunc("/test/start", s.startTestHandler)
 	s.mux.HandleFunc("/test/next", s.testHandler)
 	s.mux.HandleFunc("/test/assert", s.assertHandler)
+	s.mux.HandleFunc("/test/stop", s.stopHandler)
 }
 
 func (s *HTTPService) startTestHandler(writer http.ResponseWriter, req *http.Request) {
@@ -37,6 +38,12 @@ func (s *HTTPService) testHandler(writer http.ResponseWriter, req *http.Request)
 		return
 	}
 
+	err := req.ParseForm()
+	if err != nil {
+		http.Error(writer, "Unable to parse form", http.StatusInternalServerError)
+		return
+	}
+
 	idStr := req.FormValue("sessionID")
 	sessionID, err := strconv.Atoi(idStr)
 	if err != nil {
@@ -52,7 +59,7 @@ func (s *HTTPService) testHandler(writer http.ResponseWriter, req *http.Request)
 
 	problemID, found := session.GetNextUnanswered()
 	if !found {
-		http.Redirect(writer, req, "/result", http.StatusFound)
+		writer.WriteHeader(204)
 		return
 	}
 
@@ -81,6 +88,11 @@ func (s *HTTPService) assertHandler(writer http.ResponseWriter, req *http.Reques
 		http.Error(writer, "Method not supported", http.StatusBadRequest)
 		return
 	}
+	err := req.ParseForm()
+	if err != nil {
+		http.Error(writer, err.Error(), http.StatusInternalServerError)
+		return
+	}
 
 	sessionID, errSess := strconv.Atoi(req.FormValue("sessionID"))
 	problemID, errProb := strconv.Atoi(req.FormValue("problemID"))
@@ -90,9 +102,48 @@ func (s *HTTPService) assertHandler(writer http.ResponseWriter, req *http.Reques
 		return
 	}
 
-	_, err := s.testSessions.Assert(int64(sessionID), int64(problemID), answer)
+	_, err = s.testSessions.Assert(int64(sessionID), int64(problemID), answer)
 	if err != nil {
 		http.Error(writer, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	return
+}
+
+func (s *HTTPService) stopHandler(writer http.ResponseWriter, req *http.Request) {
+	if req.Method != http.MethodPost {
+		http.Error(writer, "Method not supported", http.StatusBadRequest)
+		return
+	}
+
+	err := req.ParseForm()
+	if err != nil {
+		http.Error(writer, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	idStr := req.FormValue("sessionID")
+	sessionID, err := strconv.Atoi(idStr)
+	if err != nil {
+		http.Error(writer, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	score, err := s.testSessions.CloseSession(int64(sessionID))
+	if err != nil {
+		http.Error(writer, err.Error(), http.StatusForbidden)
+		return
+	}
+
+	bytes, err := json.Marshal(score)
+	if err != nil {
+		http.Error(writer, "Marshal error", http.StatusInternalServerError)
+		return
+	}
+
+	_, err = writer.Write(bytes)
+	if err != nil {
+		http.Error(writer, "Write error", http.StatusInternalServerError)
 		return
 	}
 	return

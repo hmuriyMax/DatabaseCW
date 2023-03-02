@@ -1,13 +1,13 @@
 module github.com/hmuriyMax/DatabaseCW
 
-go 1.20
+go 1.19
 
 require (
-	github.com/Masterminds/squirrel v1.5.3
+	github.com/Masterminds/squirrel v1.5.2
 	github.com/gorilla/mux v1.8.0
-	github.com/jmoiron/sqlx v1.3.5
-	github.com/lib/pq v1.10.7
-	golang.org/x/exp v0.0.0-20230224173230-c95f2b4c22f2
+	github.com/jmoiron/sqlx v1.3.4
+	github.com/lib/pq v1.10.6
+	golang.org/x/exp v0.0.0-20230131160201-f062dba9d201
 )
 
 require (
