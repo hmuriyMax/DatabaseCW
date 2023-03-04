@@ -2,6 +2,7 @@ function onloadPage() {
     // window.alert(onWindowLoadMessage)
     initClock()
     showCalendar()
+    animateBanner().then()
 }
 
 function initClock() {
@@ -31,6 +32,32 @@ function updateClock() {
     }
     clock.getElementsByClassName("time")[0].innerText = hour + ":" + minute + ":" + second
     clock.getElementsByClassName("date")[0].innerText = day + " " + getMonthName(month) + " " + year
+}
+
+async function animateBanner() {
+    let banner = document.getElementById("banner")
+    let width = banner.offsetWidth
+    let height = banner.offsetHeight
+    let Vx = 1
+    let Vy = 1
+    let timer = setInterval(function (){
+        let screenWidth = document.documentElement.clientWidth
+        let screenHeight = document.documentElement.clientHeight
+        let top = banner.offsetTop
+        let left = banner.offsetLeft
+        let right = left + width
+        let bottom = top + height
+
+        if (right >= screenWidth || left <= 0) {
+            Vx *= -1
+        }
+        if (bottom >= screenHeight || top <= 0) {
+            Vy *= -1
+        }
+
+        banner.style.left = (left + Vx).toString() + 'px'
+        banner.style.top = (top + Vy).toString() + 'px'
+    }, 10)
 }
 
 onloadPage()
