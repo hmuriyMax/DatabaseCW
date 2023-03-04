@@ -1,14 +1,14 @@
 [
   {
     "id": 1,
-    "question": "Кто проживает на дне океана?",
+    "question": "Учитель задал детям такую задачу: «У матери три дочери. Произведение возрастов дочерей равно 40, а сумма возрастов равна количеству учеников в нашем классе. Сколько лет дочерям?» <br> Видя, что ученики затрудняются дать ответ, учитель добавил: «У самой младшей дочери зелёные глаза». Ребята успешно справились с этой задачей. Сколько учеников в классе?",
     "image": "",
-    "answer": "Губка Боб квадратные штаны"
+    "answer": "14"
   },
   {
     "id": 2,
-    "question": "Вы умный?",
-    "image": "https://st3.depositphotos.com/1004996/33045/v/600/depositphotos_330455390-stock-illustration-comic-finger-points-at-viewer.jpg",
-    "answer": "да"
+    "question": "",
+    "image": "https://sun9-34.userapi.com/impg/uFGzuHPpbGz04LxUSx1fRKS_lox6vybYb8Hrvw/yRM_Sh9EQzc.jpg?size=754x317&quality=95&sign=0c8b67c511172a90a07daf86cffa7649&type=album",
+    "answer": "18"
   }
 ]

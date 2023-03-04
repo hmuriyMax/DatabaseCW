@@ -18,3 +18,18 @@ function getMonthName(month) {
         default: return month.toString()
     }
 }
+
+
+const urlStart = '/test/start';
+const urlNext = '/test/next';
+const urlAssert = '/test/assert';
+const urlStop = '/test/stop';
+
+const startHTML = `<div class="textBlock">
+  <h1>Пройдите наш лучший тест на IQ!</h1>
+  <div>Необходимо будет решить 2 задачи на логику. Максимальный балл: 150</div>
+</div>
+<div class="info"></div>
+<div id="buttonBlock">
+    <button class="" onclick="startTest()">Начать тест</button>
+</div>`
