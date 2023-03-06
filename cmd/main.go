@@ -14,7 +14,7 @@ func main() {
 	logger.SetFlags(log.Ldate | log.Lmicroseconds)
 
 	sqlSvc := sqlservice.NewSQLService("postgres", "postgrespw",
-		"192.168.1.12", "5432", "course_work", logger)
+		"192.168.1.9", "5432", "course_work", logger)
 	sqlContext, cancelSql := context.WithTimeout(context.Background(), time.Second)
 	defer cancelSql()
 	err := sqlSvc.Start(sqlContext)

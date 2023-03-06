@@ -66,6 +66,8 @@ header{
     position: fixed;
     height:3em;
     width: 100%;
+    background-color: #EEE;
+    z-index: 100;
 }
 header ul{
     height: 100%;
@@ -331,7 +333,8 @@ img[src=""]{
 }
 
 #banner{
-    position: absolute;
+    position: fixed;
+    z-index: 1000;
     top: 10px;
     left: 10px;
     width: 20%;
@@ -340,6 +343,74 @@ img[src=""]{
 
 #banner img {
     width: 100%;
-    box-shadow: 0 0 10px #fdda48;
+    box-shadow: 0 0 30px #42275b;
     border-radius: 2px;
 }
+
+#image-block{
+    position: relative;
+    min-width: 100%;
+    min-height: 22vh;
+}
+
+#image-block img {
+    height: 22vh;
+    box-shadow: 0 0 30px #000;
+}
+#image-block > *:first-child{
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+ }
+ #image-block > *:nth-child(2) {
+     position: relative;
+     display: block;
+     margin: 10px auto;
+     z-index: 2;
+ }
+ #image-block > *:last-child{
+     position: absolute;
+     top: 0;
+     right: 0;
+     z-index: 1;
+ }
+
+ h1{
+     color: #42275b;
+     letter-spacing: 2px;
+     margin-bottom: 0;
+ }
+
+ p{
+     font-family: 'Consolas', monospace;
+     text-shadow: 0 0 25px #0f0;
+     margin-top: 5px;
+ }
+
+ .map {
+     max-width: 600px;
+ }
+
+ #map-image {
+     position: relative;
+ }
+
+ #map-image a {
+     position: absolute;
+     border: 1px dotted #ff05;
+ }
+
+ #vk-link{
+     left: 390px;
+     top: 155px;
+     width: 185px;
+     height: 20px;
+ }
+
+ #chuzhoi-link{
+     left: 395px;
+     top: 345px;
+     width: 38px;
+    height: 20px;
+ }
